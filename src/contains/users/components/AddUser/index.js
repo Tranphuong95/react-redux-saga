@@ -21,6 +21,10 @@ const AddUser = (props) => {
       setPhoneNumber(value);
     }
   };
+  const handleGoBack=(e)=>{
+    e.preventDefault();
+    navigate(-1);
+  }
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -80,7 +84,8 @@ const AddUser = (props) => {
           }}
         /> */}
         <div>
-          <Button type="submit" variant="contained" sx={{padding: "8px 24px", margin: "24px 0"}}>Lưu</Button>
+          <Button type="button" color="secondary" variant="contained" sx={{padding: "8px 24px", margin: "24px 12px 24px 0", minWidth: "9em"}} onClick={handleGoBack}>Quay lại</Button>
+          <Button type="submit" variant="contained" sx={{padding: "8px 24px", margin: "24px 0 24px 12px", minWidth: "9em"}}>Lưu</Button>
         </div>
       </Box>
     </div>
