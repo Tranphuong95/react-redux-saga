@@ -1,6 +1,6 @@
 import { Box, Button, TextField, Typography } from "@mui/material";
-import React, { useState } from "react";
-import { useDispatch} from "react-redux";
+import React, { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector} from "react-redux";
 import {  useNavigate } from "react-router-dom";
 import { addUser} from "../../actions";
 
@@ -8,10 +8,20 @@ const AddUser = (props) => {
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const {success} = useSelector((state) => state.userReducers);
+  const successCurrent=useRef();
+  useEffect(()=>{
+    console.log("successCurent", success, successCurrent.current)
+    if(successCurrent.current!==success){
+      if(success && successCurrent.current===false){
+        navigate(-1)
+      }
+      successCurrent.current=success;
+    }
+  }, [success]);
+  
   const handleChange = ({ target: { value } }, name) => {
     if (name === "userName") {
       setUserName(value);
@@ -29,7 +39,7 @@ const AddUser = (props) => {
     e.preventDefault();
     try {
       await dispatch(addUser({userName, email, phoneNumber }));
-      navigate(-1);
+      // navigate(-1);
     } catch (error) {
       console.log(error);
     }
