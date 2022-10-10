@@ -3,6 +3,8 @@ import { API_URL } from "../../config-url";
 import {
   addUserFail,
   addUserSuccess,
+  deleteUserFail,
+  deleteUserSuccess,
   getListUsers,
   getListUsersFail,
   getListUsersSuccess,
@@ -27,24 +29,12 @@ function* getListUserSaga(action) {
     });
     if (results?.statusCode===0) {
       yield put(getListUsersSuccess({data: results.data, pagination: results.pagination}));
-      action.payload.notify("Lấy danh sách user thành công", {variant: "success", anchorOrigin:{
-        vertical: 'top',
-        horizontal: 'right',
-      }} )
     } else {
-      yield put(getListUsersFail);
-      action.payload.notify("Lấy danh sách user thất bại", {variant: "success", anchorOrigin:{
-        vertical: 'top',
-        horizontal: 'right',
-      }} )
+      yield put(getListUsersFail());
     }
   } catch (error) {
     console.log(error);
-    yield put(getUserFail);
-    action.payload.notify("Lấy danh sách user thất bại", {variant: "success", anchorOrigin:{
-      vertical: 'top',
-      horizontal: 'right',
-    }} )
+    yield put(getUserFail());
   }
 }
 //Sau khi nhận đươc action ADD_USER sẽ tiến hành gọi hàm addUserSaga
@@ -70,7 +60,7 @@ function* addUserSaga(action) {
         horizontal: 'right',
       }} )
     } else {
-      yield put(addUserFail);
+      yield put(addUserFail());
       action.payload.notify("Thêm mới thất bại", {variant: "error", anchorOrigin:{
         vertical: 'top',
         horizontal: 'right',
@@ -78,7 +68,7 @@ function* addUserSaga(action) {
     }
   } catch (error) {
     console.log(error);
-    yield put(addUserFail);
+    yield put(addUserFail());
     action.payload.notify("Thêm mới thất bại", {variant: "error", anchorOrigin:{
       vertical: 'top',
       horizontal: 'right',
@@ -96,24 +86,12 @@ function* getUserSaga(action) {
     });
     if (results?.statusCode===0) {
       yield put(getUserSuccess(results));
-      action.payload.notify("Lấy danh thông tin user thành công", {variant: "success", anchorOrigin:{
-        vertical: 'top',
-        horizontal: 'right',
-      }} )
     } else {
-      yield put(getUserFail);
-      action.payload.notify("Lấy thông tin user thất bại", {variant: "error", anchorOrigin:{
-        vertical: 'top',
-        horizontal: 'right',
-      }} )
+      yield put(getUserFail());
     }
   } catch (error) {
     console.log(error);
-    yield put(getUserFail);
-    action.payload.notify("Lấy thông tin user thất bại", {variant: "error", anchorOrigin:{
-      vertical: 'top',
-      horizontal: 'right',
-    }} )
+    yield put(getUserFail());
   }
 }
 function* updateUserSaga(action) {
@@ -140,7 +118,7 @@ function* updateUserSaga(action) {
         horizontal: 'right',
       }} )
     } else {
-      yield put(updateUserFail);
+      yield put(updateUserFail());
       action.payload.notify("Cập nhật thông tin user thất bại", {variant: "error", anchorOrigin:{
         vertical: 'top',
         horizontal: 'right',
@@ -148,7 +126,7 @@ function* updateUserSaga(action) {
     }
   } catch (error) {
     console.log(error);
-    yield put(updateUserFail);
+    yield put(updateUserFail());
     action.payload.notify("Cập nhật thông tin user thất bại", {variant: "error", anchorOrigin:{
       vertical: 'top',
       horizontal: 'right',
@@ -174,6 +152,7 @@ function* deleteUserSaga(action){
         .then((res) => res);
     });
     if(results.statusCode===0){
+      yield put(deleteUserSuccess())
       yield put(getListUsers(action.payload.notify))
       action.payload.notify("Xóa user thành công", {variant: "success", anchorOrigin:{
         vertical: 'top',
@@ -181,12 +160,14 @@ function* deleteUserSaga(action){
       }} )
     }
     else{
+      yield put(deleteUserFail());
       action.payload.notify("Xóa user thất bại", {variant: "error", anchorOrigin:{
         vertical: 'top',
         horizontal: 'right',
       }} )
     }
   } catch (error) {
+    yield put(deleteUserFail());
     action.payload.notify("Xóa user thất bại", {variant: "error", anchorOrigin:{
       vertical: 'top',
       horizontal: 'right',

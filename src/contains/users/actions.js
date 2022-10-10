@@ -24,6 +24,16 @@ export const deleteUser=(id, notify)=>{
         payload: {id, notify}
     })
 }
+export const deleteUserSuccess=()=>{
+    return({
+        type: TYPE.DELETE_USER_SUCCESS, // Đùng với redux saga
+    })
+};
+export const deleteUserFail=()=>{
+    return({
+        type: TYPE.DELETE_USER_FAIL, // Đùng với redux saga
+    })
+};
 export  const getListUsers=(notify)=>{
     return({
         type: TYPE.GET_USERS,

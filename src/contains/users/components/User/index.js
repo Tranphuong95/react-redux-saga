@@ -16,9 +16,7 @@ const User = (props) => {
   const { userId } = useParams();
   const location = useLocation();
   const { view, edit } = queryString.parse(location.search);
-  const {
-    user: { userName: nameData, email: emailData, phoneNumber: phoneData }, updateSuccess
-  } = useSelector((state) => state.userReducers);
+  const {user: { userName: nameData, email: emailData, phoneNumber: phoneData }, updateSuccess, loading} = useSelector((state) => state.userReducers);
 
   useEffect(() => {
     dispatch(getUser(userId, enqueueSnackbar));
@@ -113,9 +111,9 @@ const User = (props) => {
         /> */}
         
         <div>
-          <Button type="button" color="secondary" variant="contained" sx={{padding: "8px 24px", margin: "24px 12px 24px 0", minWidth: "9em"}} onClick={handleGoBack}>Quay lại</Button>
+          <Button type="button" color="secondary" variant="contained" sx={{padding: "8px 24px", margin: "24px 12px 24px 0", minWidth: "9em"}} onClick={handleGoBack} disabled={loading}>Quay lại</Button>
           {edit && (
-          <Button type="submit" variant="contained" sx={{padding: "8px 24px", margin: "24px 0 24px 12px", minWidth: "9em"}}>Lưu</Button>
+          <Button type="submit" variant="contained" sx={{padding: "8px 24px", margin: "24px 0 24px 12px", minWidth: "9em"}} disabled={loading}>Lưu</Button>
           )}
         </div>
       </Box>

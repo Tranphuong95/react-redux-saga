@@ -12,7 +12,7 @@ const AddUser = (props) => {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const {addSuccess} = useSelector((state) => state.userReducers);
+  const {addSuccess, loading} = useSelector((state) => state.userReducers);
 
   useEffect(()=>{
     if(addSuccess){
@@ -92,8 +92,8 @@ const AddUser = (props) => {
           }}
         /> */}
         <div>
-          <Button type="button" color="secondary" variant="contained" sx={{padding: "8px 24px", margin: "24px 12px 24px 0", minWidth: "9em"}} onClick={handleGoBack}>Quay lại</Button>
-          <Button type="submit" variant="contained" sx={{padding: "8px 24px", margin: "24px 0 24px 12px", minWidth: "9em"}}>Lưu</Button>
+          <Button type="button" color="secondary" variant="contained" sx={{padding: "8px 24px", margin: "24px 12px 24px 0", minWidth: "9em"}} onClick={handleGoBack} disabled={loading}>Quay lại</Button>
+          <Button type="submit" variant="contained" sx={{padding: "8px 24px", margin: "24px 0 24px 12px", minWidth: "9em"}} disabled={loading}>Lưu</Button>
         </div>
       </Box>
     </div>
