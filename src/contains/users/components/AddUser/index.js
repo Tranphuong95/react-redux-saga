@@ -1,5 +1,6 @@
 import { Box, Button, TextField, Typography } from "@mui/material";
-import React, { useEffect, useRef, useState } from "react";
+import { useSnackbar } from "notistack";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector} from "react-redux";
 import {  useNavigate } from "react-router-dom";
 import { addUser} from "../../actions";
@@ -8,19 +9,16 @@ const AddUser = (props) => {
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const {success} = useSelector((state) => state.userReducers);
-  const successCurrent=useRef();
+  const {addSuccess} = useSelector((state) => state.userReducers);
+
   useEffect(()=>{
-    console.log("successCurent", success, successCurrent.current)
-    if(successCurrent.current!==success){
-      if(success && successCurrent.current===false){
-        navigate(-1)
-      }
-      successCurrent.current=success;
+    if(addSuccess){
+      navigate(-1)
     }
-  }, [success]);
+  },[addSuccess])
   
   const handleChange = ({ target: { value } }, name) => {
     if (name === "userName") {
@@ -38,7 +36,7 @@ const AddUser = (props) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await dispatch(addUser({userName, email, phoneNumber }));
+      await dispatch(addUser({userName, email, phoneNumber }, enqueueSnackbar));
       // navigate(-1);
     } catch (error) {
       console.log(error);

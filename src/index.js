@@ -11,6 +11,7 @@ import thunk from "redux-thunk";
 import createSagaMiddleware from "redux-saga";
 import rootReducers from "./rootReducer";
 import rootSaga from "./rootSaga";
+import { SnackbarProvider } from "notistack";
 
 const sagaMidleWare = createSagaMiddleware();
 const middleware = [thunk, sagaMidleWare];
@@ -31,7 +32,9 @@ root.render(
   <React.StrictMode>
     <Provider store={store}>
       <BrowserRouter>
+      <SnackbarProvider maxSnack={3}>
         <App />
+        </SnackbarProvider>
       </BrowserRouter>
     </Provider>
   </React.StrictMode>

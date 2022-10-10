@@ -7,6 +7,8 @@ const initialState = {
   user: {},
   loading: false,
   success: false,
+  addSuccess: false,
+  updateSuccess: false
 };
 const UserReducers = (state = initialState, action) => {
   switch (action.type) {
@@ -15,7 +17,7 @@ const UserReducers = (state = initialState, action) => {
     case Type.GET_USER:
     case Type.UPDATE_USER:
     case Type.DELETE_USER:
-      return { ...state, loading: true, success: false };
+      return { ...state, loading: true, success: false, addSuccess: false, updateSuccess: false, };
       case Type.GET_USERS_SUCCESS:
         return {
           ...state,
@@ -34,13 +36,13 @@ const UserReducers = (state = initialState, action) => {
       return {
         ...state,
         loading: false,
-        success: true,
+        addSuccess: true,
       };
     case Type.UPDATE_USER_SUCCESS:
       return {
         ...state,
         loading: false,
-        success: true,
+        updateSuccess: true,
       };
     case Type.ADD_USER_FAIL:
     case Type.GET_USER_FAIL:

@@ -27,12 +27,24 @@ function* getListUserSaga(action) {
     });
     if (results?.statusCode===0) {
       yield put(getListUsersSuccess({data: results.data, pagination: results.pagination}));
+      action.payload.notify("Lấy danh sách user thành công", {variant: "success", anchorOrigin:{
+        vertical: 'top',
+        horizontal: 'right',
+      }} )
     } else {
       yield put(getListUsersFail);
+      action.payload.notify("Lấy danh sách user thất bại", {variant: "success", anchorOrigin:{
+        vertical: 'top',
+        horizontal: 'right',
+      }} )
     }
   } catch (error) {
     console.log(error);
     yield put(getUserFail);
+    action.payload.notify("Lấy danh sách user thất bại", {variant: "success", anchorOrigin:{
+      vertical: 'top',
+      horizontal: 'right',
+    }} )
   }
 }
 //Sau khi nhận đươc action ADD_USER sẽ tiến hành gọi hàm addUserSaga
@@ -45,7 +57,7 @@ function* addUserSaga(action) {
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify(action.payload),
+        body: JSON.stringify(action.payload.body),
       })
         .then((res) => res.json())
         .then((res) => res);
@@ -53,18 +65,30 @@ function* addUserSaga(action) {
     //POST user data success-->get data user
     if (results.statusCode===0) {
       yield put(addUserSuccess());
+      action.payload.notify("Thêm mới thành công", {variant: "success", anchorOrigin:{
+        vertical: 'top',
+        horizontal: 'right',
+      }} )
     } else {
       yield put(addUserFail);
+      action.payload.notify("Thêm mới thất bại", {variant: "error", anchorOrigin:{
+        vertical: 'top',
+        horizontal: 'right',
+      }} )
     }
   } catch (error) {
     console.log(error);
     yield put(addUserFail);
+    action.payload.notify("Thêm mới thất bại", {variant: "error", anchorOrigin:{
+      vertical: 'top',
+      horizontal: 'right',
+    }} )
   }
 }
 function* getUserSaga(action) {
   try {
     const results = yield call(async () => {
-      return await fetch(`${API_URL}/users/${action.payload}`, {
+      return await fetch(`${API_URL}/users/${action.payload.id}`, {
         method: "GET",
       })
         .then((res) => res.json())
@@ -72,18 +96,30 @@ function* getUserSaga(action) {
     });
     if (results?.statusCode===0) {
       yield put(getUserSuccess(results));
+      action.payload.notify("Lấy danh thông tin user thành công", {variant: "success", anchorOrigin:{
+        vertical: 'top',
+        horizontal: 'right',
+      }} )
     } else {
       yield put(getUserFail);
+      action.payload.notify("Lấy thông tin user thất bại", {variant: "error", anchorOrigin:{
+        vertical: 'top',
+        horizontal: 'right',
+      }} )
     }
   } catch (error) {
     console.log(error);
     yield put(getUserFail);
+    action.payload.notify("Lấy thông tin user thất bại", {variant: "error", anchorOrigin:{
+      vertical: 'top',
+      horizontal: 'right',
+    }} )
   }
 }
 function* updateUserSaga(action) {
   try {
     const results = yield call(async () => {
-      const {id, userName, email, phoneNumber}=action.payload;
+      const {id, userName, email, phoneNumber}=action.payload.body;
       return await fetch(
         `${API_URL}/users/${id}`,
         {
@@ -99,21 +135,34 @@ function* updateUserSaga(action) {
     });
     if (results?.statusCode===0) {
       yield put(updateUserSuccess());
+      action.payload.notify("Cập nhật thông tin user thành công", {variant: "success", anchorOrigin:{
+        vertical: 'top',
+        horizontal: 'right',
+      }} )
     } else {
       yield put(updateUserFail);
+      action.payload.notify("Cập nhật thông tin user thất bại", {variant: "error", anchorOrigin:{
+        vertical: 'top',
+        horizontal: 'right',
+      }} )
     }
   } catch (error) {
     console.log(error);
-    yield put(addUserFail);
+    yield put(updateUserFail);
+    action.payload.notify("Cập nhật thông tin user thất bại", {variant: "error", anchorOrigin:{
+      vertical: 'top',
+      horizontal: 'right',
+    }} )
   }
 }
 //delete user
 
 function* deleteUserSaga(action){
   try {
+    console.log("action", action)
     const results=yield call(async()=>{
       return await fetch(
-        `${API_URL}/users/${action.payload}`,
+        `${API_URL}/users/${action.payload.id}`,
         {
           method: "DELETE",
           headers: {
@@ -125,10 +174,23 @@ function* deleteUserSaga(action){
         .then((res) => res);
     });
     if(results.statusCode===0){
-      yield put(getListUsers())
+      yield put(getListUsers(action.payload.notify))
+      action.payload.notify("Xóa user thành công", {variant: "success", anchorOrigin:{
+        vertical: 'top',
+        horizontal: 'right',
+      }} )
+    }
+    else{
+      action.payload.notify("Xóa user thất bại", {variant: "error", anchorOrigin:{
+        vertical: 'top',
+        horizontal: 'right',
+      }} )
     }
   } catch (error) {
-    
+    action.payload.notify("Xóa user thất bại", {variant: "error", anchorOrigin:{
+      vertical: 'top',
+      horizontal: 'right',
+    }} )
   }
 }
 function* UsersSaga() {

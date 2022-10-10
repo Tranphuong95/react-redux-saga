@@ -1,9 +1,9 @@
 import * as TYPE from "./contants";
 
-export const addUser=(body)=>{
+export const addUser=(body, notify)=>{
     return ({
         type: TYPE.ADD_USER,
-        payload: body
+        payload: {body, notify}
     })
 }
 export const addUserSuccess=(data)=>{
@@ -18,15 +18,16 @@ export const addUserFail=()=>{
     })
 };
 
-export const deleteUser=(id)=>{
+export const deleteUser=(id, notify)=>{
     return({
         type: TYPE.DELETE_USER,
-        payload: id
+        payload: {id, notify}
     })
 }
-export  const getListUsers=()=>{
+export  const getListUsers=(notify)=>{
     return({
         type: TYPE.GET_USERS,
+        payload: {notify}
     })
 };
 export  const getListUsersSuccess=(data)=>{
@@ -41,10 +42,10 @@ export  const getListUsersFail=()=>{
         type: TYPE.GET_USERS_FAIL
     })
 };
-export  const getUser=(id)=>{
+export  const getUser=(id, notify)=>{
     return({
         type: TYPE.GET_USER,
-        payload: id
+        payload: {id, notify}
     })
 };
 export  const getUserSuccess=(data)=>{
@@ -59,10 +60,10 @@ export  const getUserFail=(id)=>{
     })
 };
 
-export  const updateUser=(body)=>{
+export  const updateUser=(body, notify)=>{
     return({
         type: TYPE.UPDATE_USER,
-        payload: body
+        payload: {body, notify}
     })
 };
 export  const updateUserSuccess=(data)=>{

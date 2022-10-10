@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { deleteUser, getListUsers } from "./actions";
 import { useNavigate } from "react-router-dom";
+import { useSnackbar } from "notistack";
 
 const columns = (handleGoViewUser, handleGoEditUser, handelDeleteUser) => [
   { field: "index", headerName: "Index", width: 90 },
@@ -79,6 +80,7 @@ const columns = (handleGoViewUser, handleGoEditUser, handelDeleteUser) => [
 
 export default function Users() {
   const dispatch = useDispatch();
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const {
     data: datas,
     pagination: { page, limit },
@@ -94,7 +96,7 @@ export default function Users() {
       }))
     : [];
   React.useEffect(() => {
-    dispatch(getListUsers());
+    dispatch(getListUsers(enqueueSnackbar));
   }, []);
 
   const handleAddUser=()=>{
@@ -107,7 +109,7 @@ export default function Users() {
     navigate(`${id}?edit=true`);
   };
   const handelDeleteUser = (id) => {
-    dispatch(deleteUser(id))
+    dispatch(deleteUser(id, enqueueSnackbar))
   };
   return (
     <div className="users-wrapper">

@@ -4,25 +4,31 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import queryString from "query-string";
 import { getUser, updateUser } from "../../actions";
+import { useSnackbar } from "notistack";
 
 const User = (props) => {
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { userId } = useParams();
   const location = useLocation();
   const { view, edit } = queryString.parse(location.search);
   const {
-    user: { userName: nameData, email: emailData, phoneNumber: phoneData }
+    user: { userName: nameData, email: emailData, phoneNumber: phoneData }, updateSuccess
   } = useSelector((state) => state.userReducers);
 
   useEffect(() => {
-    dispatch(getUser(userId));
+    dispatch(getUser(userId, enqueueSnackbar));
   }, []);
-
+  useEffect(()=>{
+    if(updateSuccess){
+      navigate(-1)
+    }
+  },[updateSuccess])
+  
   useEffect(() => {
     setUserName(nameData);
     setEmail(emailData);
@@ -45,8 +51,7 @@ const User = (props) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await dispatch(updateUser({ id: userId, userName, email, phoneNumber }));
-      navigate(-1);
+      await dispatch(updateUser({ id: userId, userName, email, phoneNumber }, enqueueSnackbar));
     } catch (error) {
       console.log(error);
     }
